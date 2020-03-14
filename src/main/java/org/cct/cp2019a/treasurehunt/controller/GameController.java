@@ -22,8 +22,7 @@ import java.util.List;
 @Controller
 public class GameController {
 
-    @Autowired
-    private GameValidator gameValidator;
+    private GameValidator gameValidator = new GameValidator();
 
     private Game game;
 
