@@ -63,4 +63,9 @@ public class Player {
     public String toString() {
         return "Pirate '" + fullName + ", " + age + "years old - Score: " + piratePoints + " Pirate points";
     }
+
+    public void dig() {
+        Integer digPoints = this.shovel.getDigPoints();
+
+    }
 }

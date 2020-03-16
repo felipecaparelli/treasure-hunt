@@ -1,10 +1,35 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
     <head>
         <link href = "css/styles.css" rel = "stylesheet"/>
         <title>PIRATE PETE’S TREASURE HUNT GAME</title>
     </head>
     <body>
-        <h4>Games Rules</h4>
+        <h4>GAME RULES</h4>
+    <div>
+        <h6>The game must follow these rules:</h6>
+        <ol>
+            <li>Each player may only select a square that exists on the “Map”</li>
+            <li>A square can only be selected once (i.e. you cannot ‘dig’ in the same place more than once)</li>
+            <li>If the player finds some treasure, then add 20 “Pirate Points” to their total and mark the square on the map as having been selected (or “used”). You can decide how this is shown, but it must be clear to the user.
+                <ul>
+                    <li>a. The Player will celebrate by saying “Yo-ho-ho and a bottle of rum. I found me some pieces of eight.”</li>
+                </ul>
+            </li>
+            <li>If the player does not find any treasure, then they do not score any “Pirate Points”. You will still need to show that the square has been “used”
+                <ul>
+                    <li>a. The Player will sulk by saying “Walk the plank! There be no treasure here!”</li>
+                </ul>
+            </li>
+            <li>In all cases, subtract 1 from the Player’s “Dig Points”</li>
+            <li>Now move to the next player and repeat the process. This will mean that you need to “re-draw” the map on the screen showing the square(s) that have been chosen so far.</li>
+            <li>If a Player has no “Dig Points” left, then they miss their turn. They must say “Argh, Captain, me shovel has broken!”</li>
+            <li>If all the treasure is found, then the game is over.</li>
+            <li>If no player has any “Dig Points” left, then the game is over.</li>
+        </ol>
+
+        <a href="/start">PLAY NOW</a>
+
+    </div>
     </body>
 </html>

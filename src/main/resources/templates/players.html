@@ -1,5 +1,5 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
     <head>
         <link href = "css/styles.css" rel = "stylesheet"/>
         <title>PIRATE PETE?S TREASURE HUNT GAME</title>
@@ -7,14 +7,14 @@
     <body>
         <h1>ADD THE PLAYERS PROFILE</h1>
 
-        <h4>Player NUM</h4>
-        <form>
-            <select>
-                <option value="2">2 PLAYERS</option>
-                <option value="3">3 PLAYERS</option>
-                <option value="4">4 PLAYERS</option>
-            </select>
-            <button type="submit">OK</button>
+        <h4>Players profile</h4>
+        <form th:action="@{/admin/user/update}" method="post" th:object="${player}">
+            <div th:each="player,iter: ${players}">
+                <p th:text="${iter.index}"></p>
+                <input type="text" th:value="*{fullName}" name="fullName"/>
+                <input type="number" th:value="*{age}" name="age"/>
+            </div>
+            <button type="submit">ADD PLAYERS</button>
         </form>
     </body>
 </html>

@@ -8,7 +8,7 @@
     <body>
         <h1>NEW GAME</h1>
         <h4>Enter the number of players in the game:</h4>
-        <form action="#" th:action="@{/index}" th:object="${gameStartData}" method="post">
+        <form action="#" th:action="@{/index}" th:object="${gameData}" method="post">
             <div><span th:if="${error != null}" th:text="${error}">Validation Error</span></div>
             <select th:field="*{numberOfPlayer}">
                 <option value="2">2 PLAYERS</option>
