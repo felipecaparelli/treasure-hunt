@@ -47,4 +47,10 @@ public class GameUtils {
         }
         return rows;
     }
+
+    public static void main(String[] args) {
+        buildGameBoard().getGrid().forEach((s, boardSquares) -> {
+            System.out.println("column: " + s + " rows: " + boardSquares.size());
+        });
+    }
 }
