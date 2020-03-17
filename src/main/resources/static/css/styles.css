@@ -32,3 +32,13 @@ p.writing {
 p.handwriting {
     font-family: "Waiting Sunrise";
 }
+
+.field {
+    display: flex;
+    justify-content: space-between;
+}
+
+.field label, .field input {
+    flex-grow: 1;
+}
+

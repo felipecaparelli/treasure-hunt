@@ -2,8 +2,13 @@ package org.cct.cp2019a.treasurehunt.validator;
 
 import org.cct.cp2019a.treasurehunt.constant.GameRuleMessages;
 import org.cct.cp2019a.treasurehunt.exception.GameRuleException;
+import org.cct.cp2019a.treasurehunt.model.BoardSquare;
+import org.cct.cp2019a.treasurehunt.model.Game;
+import org.cct.cp2019a.treasurehunt.model.GameBoard;
 import org.cct.cp2019a.treasurehunt.model.Player;
 import org.cct.cp2019a.treasurehunt.util.NumberUtils;
+
+import java.util.List;
 
 /**
  * This class is responsible for applying the game rules validation.
@@ -80,5 +85,27 @@ public class GameValidator {
      */
     private boolean isValidPlayerAge(int playerAge) {
         return playerAge >= 12;
+    }
+
+    /**
+     * This method validates if the game is over or not.
+     * @return
+     */
+    public boolean isGameOver(Game game) {
+        boolean playersHasRemainingDigPoints = isAnyPlayerWithDigPoints(game.getPlayers());
+        boolean isAnySquareAvailable = isAnySquareAvailable(game.getGameBoard());
+        return !playersHasRemainingDigPoints && !isAnySquareAvailable;
+    }
+
+    private boolean isAnyPlayerWithDigPoints(List<Player> players) {
+        return players.stream().anyMatch(player -> player.getShovel().getDigPoints() > 0);
+    }
+
+    private boolean isAnySquareAvailable(GameBoard gameBoard) {
+        return gameBoard.getGrid().values().stream().anyMatch(this::hasSquareToDug);
+    }
+
+    private boolean hasSquareToDug(List<BoardSquare> boardSquares) {
+        return boardSquares.stream().anyMatch(boardSquare -> !boardSquare.isDug());
     }
 }

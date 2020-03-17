@@ -8,11 +8,14 @@
         <h1>ADD THE PLAYERS PROFILE</h1>
 
         <h4>Players profile</h4>
-        <form th:action="@{/admin/user/update}" method="post" th:object="${player}">
-            <div th:each="player,iter: ${players}">
-                <p th:text="${iter.index}"></p>
-                <input type="text" th:value="*{fullName}" name="fullName"/>
-                <input type="number" th:value="*{age}" name="age"/>
+        <form th:action="@{/players}" method="post" th:object="${player}">
+            <div class="field">
+                <label>Full Name</label>
+                <input type="text" th:value="*{fullName}" name="fullName" placeholder="Name"/>
+            </div>
+            <div class="field">
+                <label>Age</label>
+                <input type="number" th:value="*{age}" name="age" placeholder="Age"/>
             </div>
             <button type="submit">ADD PLAYERS</button>
         </form>

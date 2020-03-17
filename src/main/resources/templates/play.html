@@ -1,0 +1,34 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+    <head>
+        <title>PIRATE PETE’S TREASURE HUNT GAME</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link href = "css/styles.css" rel = "stylesheet"/>
+        <script src="js/ajax.js"></script>
+    </head>
+    <body>
+        <h1>TREASURE MAP</h1>
+        <table>
+            <thead>
+            <th>
+            <td>A</td>
+            </th>
+            </thead>
+            <tr>
+                <td>1</td>
+                <td>
+                    <button type="button" onclick="dig(row,col)">DIG</button>
+                    <span>Validation Error</span>
+                </td>
+            </tr>
+        </table>
+        <script>
+            function dig(row, col) {
+                var url = location.protocol + '//' + location.host + '/dig';
+                request.post(url, `?row=${row}&col=${col}`, function (response) {
+                    console.log(response);
+                });
+            }
+        </script>
+    </body>
+</html>
