@@ -10,12 +10,12 @@
         <h1>TREASURE MAP</h1>
         <table>
             <thead>
-            <th>
-            <td>A</td>
+            <th th:each="header: ${headers}">
+                <td th:text="${header}"></td>
             </th>
             </thead>
-            <tr>
-                <td>1</td>
+            <tr th:each="row: ${rows}">
+                <td th:text="${row}"></td>
                 <td>
                     <button type="button" onclick="dig(row,col)">DIG</button>
                     <span>Validation Error</span>
