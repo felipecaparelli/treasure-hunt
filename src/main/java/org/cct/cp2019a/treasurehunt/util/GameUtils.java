@@ -3,15 +3,21 @@ package org.cct.cp2019a.treasurehunt.util;
 import org.cct.cp2019a.treasurehunt.model.BoardSquare;
 import org.cct.cp2019a.treasurehunt.model.GameBoard;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Generates data for the game.
  */
 public class GameUtils {
+
+    /**
+     * Returns the labels for the game board columns;
+     * @return
+     */
+    public static List<String> gameBoardColumnLabels() {
+        String[] columns = new String[]{"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"};
+        return Arrays.asList(columns);
+    }
 
     /**
      * Build the game board.
@@ -27,9 +33,8 @@ public class GameUtils {
      */
     private static Map<String, List<BoardSquare>> buildGameBoardGrid() {
         Map<String, List<BoardSquare>> grid = new HashMap<>();
-        String[] columnNames = {"A","B","C","D","E","F","G","H","I","J"};
-        for(String columnName : columnNames) {
-            grid.put(columnName, buildGridRow(columnName));
+        for(String column : gameBoardColumnLabels()) {
+            grid.put(column, buildGridRow(column));
         }
         
         return grid;

@@ -8,19 +8,29 @@ import org.cct.cp2019a.treasurehunt.validator.GameValidator;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class represents the game
+ */
 public class Game {
 
     private GameStatus gameStatus = GameStatus.NOT_INITIALIZED;
     private int playerSlots = 0;
+    private List<PlayerSlot> slots = null;
     private List<Player> players = new ArrayList<>(2);
     private GameBoard gameBoard;
     private Player activePlayer;
+    private PlayerSlot activeProfile = new PlayerSlot();
 
-    public Game (GameBoard gameBoard, int numberOfPlayer) {
+    /** game not initialized */
+    public Game () {}
+
+    public void init(GameBoard gameBoard, int numberOfPlayer) {
         this.gameBoard = gameBoard;
         this.playerSlots = numberOfPlayer;
+        this.slots = new ArrayList<>(numberOfPlayer);
     }
 
+    @Deprecated
     public boolean addPlayer(Player player) throws GameRuleException {
         if(GameValidator.MAX_NUM_OF_PLAYER <= this.players.size()) {
             throw new GameRuleException(GameRuleMessages.NUM_OF_PLAYERS_RULE);
@@ -29,10 +39,8 @@ public class Game {
         return this.players.add(player);
     }
 
-    public void start() throws GameRuleException {
-        if(this.playerSlots > 0) {
-            throw new GameRuleException("You need to select all player before starting");
-        }
+    public void start() {
+        this.getSlots().forEach(slot -> this.players.add(new Player(slot.getFullName(), slot.getAge())));
         this.activePlayer = this.players.get(0);
         this.gameStatus = GameStatus.STARTED;
     }
@@ -45,8 +53,8 @@ public class Game {
         }
     }
 
-    public boolean hasAnyPlayerSlotAvailable() {
-        return this.playerSlots > 0;
+    public boolean hasAnySlotToFill() {
+        return this.playerSlots != this.slots.size();
     }
 
     public GameStatus getGameStatus() {
@@ -61,7 +69,29 @@ public class Game {
         return players;
     }
 
+    public Player getActivePlayer() {
+        return activePlayer;
+    }
+
+    public List<PlayerSlot> getSlots() {
+        return slots;
+    }
+
+    public int getPlayerSlots() {
+        return playerSlots;
+    }
+
+    public PlayerSlot getActiveProfile() {
+        return activeProfile;
+    }
+
     public GameBoard getGameBoard() {
         return gameBoard;
+    }
+
+    public void moveSlot() {
+        PlayerSlot slot = this.activeProfile;
+        this.slots.add(slot);
+        this.activeProfile = new PlayerSlot();
     }
 }

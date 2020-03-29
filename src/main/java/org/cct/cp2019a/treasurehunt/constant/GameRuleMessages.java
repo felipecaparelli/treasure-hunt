@@ -9,4 +9,5 @@ public final class GameRuleMessages {
 
     // optional
     public static final String CANNOT_DIG_TWICE_RULE = "This position has already been dug";
+    public static final String INVALID_DIG_POSITION = "Invalid dig position (Please use A-J for column and 1-10 for row)";
 }

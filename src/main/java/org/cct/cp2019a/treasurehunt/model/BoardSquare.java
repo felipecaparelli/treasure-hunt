@@ -43,19 +43,14 @@ public class BoardSquare {
         return treasure != null;
     }
 
-    public boolean isTreasureFound() {
-        return dug && hasTreasure();
-    }
-
     private String noneOrValue(Treasure treasure) {
-        String treasureValue = treasure != null && treasure.getValue() > 0 ? String.valueOf(treasure.getValue()) : null;
-        return StringUtils.noneOrValue(treasureValue);
+        String treasureValue = hasTreasure() && treasure.getValue() > 0 ? String.valueOf(treasure.getValue()) : null;
+        return StringUtils.zeroOrValue(treasureValue);
     }
 
     @Override
     public String toString() {
-        return "Board square {" +
-                "column: '" + column + "', row: " + row + ", treasure: " + noneOrValue(treasure) + ", dug: " + dug +
-                '}';
+        String content = dug ? noneOrValue(treasure) : "   ";
+        return '{' + content + '}';
     }
 }

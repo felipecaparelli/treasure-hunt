@@ -15,12 +15,12 @@ public class StringUtils {
     }
 
     /**
-     * Return the word 'None' for null for empty input or the original value.
+     * Return the word ' 0 ' for null for empty input or the original value.
      * @param value original value
      * @return
      */
-    public static String noneOrValue(String value) {
-        return (value == null || value.trim().isEmpty()) ? "None" : value;
+    public static String zeroOrValue(String value) {
+        return (value == null || value.trim().isEmpty()) ? " 0 " : String.format("%03d", Integer.parseInt(value));
     }
 
 }

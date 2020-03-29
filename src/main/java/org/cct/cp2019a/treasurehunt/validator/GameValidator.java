@@ -2,10 +2,12 @@ package org.cct.cp2019a.treasurehunt.validator;
 
 import org.cct.cp2019a.treasurehunt.constant.GameRuleMessages;
 import org.cct.cp2019a.treasurehunt.exception.GameRuleException;
+import org.cct.cp2019a.treasurehunt.exception.InvalidDigPositionException;
 import org.cct.cp2019a.treasurehunt.model.BoardSquare;
 import org.cct.cp2019a.treasurehunt.model.Game;
 import org.cct.cp2019a.treasurehunt.model.GameBoard;
 import org.cct.cp2019a.treasurehunt.model.Player;
+import org.cct.cp2019a.treasurehunt.util.GameUtils;
 import org.cct.cp2019a.treasurehunt.util.NumberUtils;
 
 import java.util.List;
@@ -58,7 +60,7 @@ public class GameValidator {
      * and throws a {@link org.cct.cp2019a.treasurehunt.exception.GameRuleException} if not.
      */
     public boolean isValidPlayer(Player player) throws GameRuleException {
-        if(!isValidaPlayerName(player.getFullName())) {
+        if(!isValidPlayerName(player.getFullName())) {
             throw new GameRuleException(GameRuleMessages.PLAYER_NAME_RULE);
         }
         if(!isValidPlayerAge(player.getAge())) {
@@ -71,20 +73,28 @@ public class GameValidator {
      * Validates the player's name.
      * VALIDATION RULE: The player has to enter their name in one line and must enter a first name and surname
      * @param playerName the player's name
-     * @return true if the name has been provided correctly (first name and surname)
+     * @return return true if all rules are OK,
+     * and throws a {@link org.cct.cp2019a.treasurehunt.exception.GameRuleException} if not.
      */
-    private boolean isValidaPlayerName(String playerName) {
-        return playerName != null && playerName.trim().contains(" ");
+    public boolean isValidPlayerName(String playerName) throws GameRuleException {
+        if (playerName == null || !playerName.trim().contains(" ")) {
+            throw new GameRuleException(GameRuleMessages.PLAYER_NAME_RULE);
+        }
+        return true;
     }
 
     /**
      * Validates the player's age.
      * VALIDATION RULE: The player’s age must be 12 or over
      * @param playerAge player's age
-     * @return true if the age is equals or greater than 12
+     * @return return true if all rules are OK,
+     * and throws a {@link org.cct.cp2019a.treasurehunt.exception.GameRuleException} if not.
      */
-    private boolean isValidPlayerAge(int playerAge) {
-        return playerAge >= 12;
+    public boolean isValidPlayerAge(int playerAge) throws GameRuleException {
+        if (playerAge < 12) {
+            throw new GameRuleException(GameRuleMessages.PLAYER_AGE_RULE);
+        }
+        return true;
     }
 
     /**
@@ -107,5 +117,44 @@ public class GameValidator {
 
     private boolean hasSquareToDug(List<BoardSquare> boardSquares) {
         return boardSquares.stream().anyMatch(boardSquare -> !boardSquare.isDug());
+    }
+
+    /**
+     * This method validates the input for the dig action.
+     * @param params
+     * @return
+     * @throws InvalidDigPositionException
+     */
+    public boolean isDigValid(String... params) throws InvalidDigPositionException {
+        if (params.length != 2) {
+            throw new InvalidDigPositionException();
+        }
+
+        try {
+
+            String column = params[0];
+            int row = Integer.parseInt(params[1]);
+
+            if (!GameUtils.gameBoardColumnLabels().contains(column) || !NumberUtils.isBetween(row, 1, 10)) {
+                throw new InvalidDigPositionException();
+            }
+        } catch (Exception e) {
+            throw new InvalidDigPositionException();
+        }
+
+        return true;
+    }
+
+    /**
+     * This method validates the input for the dig action (OPTION WITH 1 INPUT).
+     * @param param
+     * @return
+     * @throws InvalidDigPositionException
+     */
+    public boolean isDigValid(String param) throws InvalidDigPositionException {
+        if (param == null || param.length() != 2) {
+            throw new InvalidDigPositionException();
+        }
+        return isDigValid(param.split("(?!^)"));
     }
 }
