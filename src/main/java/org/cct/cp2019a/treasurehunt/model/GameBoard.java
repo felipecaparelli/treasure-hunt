@@ -20,4 +20,34 @@ public class GameBoard {
     public Map<String, List<BoardSquare>> getGrid() {
         return grid;
     }
+
+    /**
+     * Return true if the treasure was found in the position where the player has dug.
+     * @param column
+     * @param row
+     * @return
+     */
+    public boolean hasTreasure(String column, int row) {
+        return grid.get(column).get(row-1).hasTreasure();
+    }
+
+    /**
+     * Returns the value stores on the game board position
+     * @param column
+     * @param row
+     * @return
+     */
+    public int getTreasureValue(String column, int row) {
+        return grid.get(column).get(row-1).getTreasure().getValue();
+    }
+
+    /**
+     * Returns if the board square is already dug
+     * @param column
+     * @param row
+     * @return
+     */
+    public boolean isDug(String column, int row) {
+        return grid.get(column).get(row-1).isDug();
+    }
 }

@@ -1,6 +1,7 @@
 package org.cct.cp2019a.treasurehunt.model;
 
 import org.cct.cp2019a.treasurehunt.enumeration.ShovelType;
+import org.cct.cp2019a.treasurehunt.exception.NoMoreDigPointsException;
 
 import java.util.Objects;
 
@@ -66,6 +67,15 @@ public class Player {
 
     public void dig() {
         Integer digPoints = this.shovel.getDigPoints();
+        if (digPoints <= 0) {
+            throw new NoMoreDigPointsException();
+        }
+        this.piratePoints = this.piratePoints - digPoints;
+        if (this.piratePoints <= 0) {
 
+        }
+    }
+
+    public void addReward(int value) {
     }
 }

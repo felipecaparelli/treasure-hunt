@@ -1,6 +1,7 @@
 package org.cct.cp2019a.treasurehunt.validator;
 
 import org.cct.cp2019a.treasurehunt.constant.GameRuleMessages;
+import org.cct.cp2019a.treasurehunt.exception.AlreadyDugException;
 import org.cct.cp2019a.treasurehunt.exception.GameRuleException;
 import org.cct.cp2019a.treasurehunt.exception.InvalidDigPositionException;
 import org.cct.cp2019a.treasurehunt.model.BoardSquare;
@@ -151,10 +152,21 @@ public class GameValidator {
      * @return
      * @throws InvalidDigPositionException
      */
-    public boolean isDigValid(String param) throws InvalidDigPositionException {
-        if (param == null || param.length() != 2) {
+    public boolean isDigValid(Game game, String param) throws InvalidDigPositionException {
+        if (param == null || param.length() != 2 || !isDigValid(param.split("(?!^)"))) {
             throw new InvalidDigPositionException();
         }
-        return isDigValid(param.split("(?!^)"));
+        String[] params = param.split("(?!^)");
+        try {
+            String col = params[0];
+            int row = Integer.parseInt(params[1]);
+            if (game.getGameBoard().isDug(col, row)) {
+                throw new AlreadyDugException();
+            }
+        } catch (Exception e) {
+            throw new InvalidDigPositionException();
+        }
+
+        return true;
     }
 }

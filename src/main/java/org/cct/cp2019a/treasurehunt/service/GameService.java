@@ -1,5 +1,6 @@
 package org.cct.cp2019a.treasurehunt.service;
 
+import org.cct.cp2019a.treasurehunt.constant.GameMessages;
 import org.cct.cp2019a.treasurehunt.constant.GameRuleMessages;
 import org.cct.cp2019a.treasurehunt.enumeration.GameStatus;
 import org.cct.cp2019a.treasurehunt.exception.GameRuleException;
@@ -61,8 +62,41 @@ public class GameService {
             case ADDING_PLAYER_AGE:
                 goToCompleteProfile(game, input);
                 break;
+            case STARTED:
+                goToPlayerTurn(game);
+            case PLAYER_ROUND:
+                goToDig(game, input);
+            case TREASURE_FOUND:
+            case TREASURE_NOT_FOUND:
+                goToPlayerTurn(game);
+                break;
             default:
                 throw new IllegalStateException("Unexpected value: " + game.getGameStatus());
+        }
+    }
+
+    private static void goToDig(Game game, String input) {
+        if (gameValidator.isDigValid(game, input)) {
+            Player activePlayer = game.getActivePlayer();
+            activePlayer.dig();
+            // was the treasure found?
+            String[] params = input.split("(?!^)");
+            String column = params[0];
+            int row = Integer.parseInt(params[1]);
+            if (game.getGameBoard().hasTreasure(column, row)) {
+                activePlayer.addReward(game.getGameBoard().getTreasureValue(column, row));
+                game.setGameStatus(GameStatus.TREASURE_FOUND);
+                System.out.println("¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨");
+                System.out.println(GameMessages.CELEBRATE_MESSAGE);
+            } else {
+                game.setGameStatus(GameStatus.TREASURE_NOT_FOUND);
+                System.out.println("¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨");
+                System.out.println(GameMessages.SUNK_MESSAGE);
+            }
+            System.out.println("¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨");
+
+            ViewUtils.printGameBoard(game.getGameBoard());
+            game.changeTurn();
         }
     }
 
@@ -121,15 +155,15 @@ public class GameService {
     public static void goToGameStart(Game game) {
         game.start();
         ViewUtils.printGameBoard(game.getGameBoard());
-    }
-
-    public void addNewPlayer(Player player) {
+        goToPlayerTurn(game);
 
     }
 
-    public void dig(String... params) throws InvalidDigPositionException {
-        if (gameValidator.isDigValid(params)) {
-
-        }
+    public static void goToPlayerTurn(Game game) {
+        Player player = game.getActivePlayer();
+        String msg = String.format("%s, WHERE DO YOU WANNA DIG? ".toUpperCase(), player.getFullName());
+        System.out.println("¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨");
+        System.out.println(msg);
+        System.out.println("¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨");
     }
 }
