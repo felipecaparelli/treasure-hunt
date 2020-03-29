@@ -31,7 +31,7 @@ public class TreasureMapUtils {
      * Read the file to get the positions where the treasures must be hidden.
      * @return the list with the positions where the treasures must be hidden
      */
-    private static List<BoardSquare> readPiratePetesSecretJournal() {
+    protected static List<BoardSquare> readPiratePetesSecretJournal() {
         List<String> columnNames = readColumnNames();
         List<Integer> rowNumber = readRowNumbers();
 

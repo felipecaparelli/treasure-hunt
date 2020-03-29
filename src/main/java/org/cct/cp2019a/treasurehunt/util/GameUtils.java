@@ -47,8 +47,15 @@ public class GameUtils {
      */
     private static List<BoardSquare> buildGridRow(String columnName) {
         List<BoardSquare> rows = new ArrayList<>(10);
+        List<BoardSquare> treasuresMap = TreasureMapUtils.readPiratePetesSecretJournal();
         for (int i=0; i < 10; i++) {
-            rows.add(new BoardSquare(columnName, i+1, null));
+            BoardSquare boardSquare = new BoardSquare(columnName, i+1, null);
+            if (treasuresMap != null && treasuresMap.contains(boardSquare)) {
+                rows.add(treasuresMap.get(treasuresMap.indexOf(boardSquare)));
+            } else {
+                rows.add(new BoardSquare(columnName, i+1, null));
+            }
+
         }
         return rows;
     }

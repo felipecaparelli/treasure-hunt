@@ -2,6 +2,8 @@ package org.cct.cp2019a.treasurehunt.model;
 
 import org.cct.cp2019a.treasurehunt.util.StringUtils;
 
+import java.util.Objects;
+
 /**
  * This model represents the square on the board game (grid). It has a column name, a row number, an optional treasure,
  * and the control to know if has been dug ir not.
@@ -52,5 +54,19 @@ public class BoardSquare {
     public String toString() {
         String content = dug ? noneOrValue(treasure) : "   ";
         return '{' + content + '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BoardSquare that = (BoardSquare) o;
+        return row == that.row &&
+                Objects.equals(column, that.column);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(column, row);
     }
 }

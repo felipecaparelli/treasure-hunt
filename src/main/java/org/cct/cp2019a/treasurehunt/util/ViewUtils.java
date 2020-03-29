@@ -65,6 +65,7 @@ public class ViewUtils {
     public static void main(String[] args) {
         GameBoard gameBoard = GameUtils.buildGameBoard();
         gameBoard.getGrid().get("A").get(0).setDug(true);
+        gameBoard.getGrid().get("A").get(6).setDug(true);
         gameBoard.getGrid().get("B").remove(2);
         gameBoard.getGrid().get("B").add(2, new BoardSquare("B", 3, new Treasure(20)));
         gameBoard.getGrid().get("B").get(2).setDug(true);
