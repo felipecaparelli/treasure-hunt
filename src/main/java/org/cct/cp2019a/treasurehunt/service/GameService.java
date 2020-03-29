@@ -66,9 +66,6 @@ public class GameService {
                 goToPlayerTurn(game);
             case PLAYER_ROUND:
                 goToDig(game, input);
-            case TREASURE_FOUND:
-            case TREASURE_NOT_FOUND:
-                goToPlayerTurn(game);
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + game.getGameStatus());
@@ -85,18 +82,23 @@ public class GameService {
             int row = Integer.parseInt(params[1]);
             if (game.getGameBoard().hasTreasure(column, row)) {
                 activePlayer.addReward(game.getGameBoard().getTreasureValue(column, row));
-                game.setGameStatus(GameStatus.TREASURE_FOUND);
+                // game.setGameStatus(GameStatus.TREASURE_FOUND);
                 System.out.println("¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨");
                 System.out.println(GameMessages.CELEBRATE_MESSAGE);
             } else {
-                game.setGameStatus(GameStatus.TREASURE_NOT_FOUND);
+                // game.setGameStatus(GameStatus.TREASURE_NOT_FOUND);
                 System.out.println("¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨");
                 System.out.println(GameMessages.SUNK_MESSAGE);
             }
             System.out.println("¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨");
 
-            ViewUtils.printGameBoard(game.getGameBoard());
-            game.changeTurn();
+            if (!game.getGameBoard().isThereAnyTreasureMissing()) {
+                goToGameOver(game);
+            } else {
+                ViewUtils.printGameBoard(game.getGameBoard());
+                game.changeTurn();
+                game.setGameStatus(GameStatus.PLAYER_ROUND);
+            }
         }
     }
 
@@ -165,5 +167,11 @@ public class GameService {
         System.out.println("¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨");
         System.out.println(msg);
         System.out.println("¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨");
+    }
+
+    public static void goToGameOver(Game game) {
+        game.setGameStatus(GameStatus.GAME_OVER);
+
+        System.exit(0);
     }
 }

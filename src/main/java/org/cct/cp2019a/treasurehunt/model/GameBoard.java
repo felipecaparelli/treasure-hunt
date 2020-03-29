@@ -1,5 +1,6 @@
 package org.cct.cp2019a.treasurehunt.model;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -49,5 +50,12 @@ public class GameBoard {
      */
     public boolean isDug(String column, int row) {
         return grid.get(column).get(row-1).isDug();
+    }
+
+    public boolean isThereAnyTreasureMissing() {
+        return this.grid.values()
+                .stream()
+                .flatMap(Collection::stream)
+                .anyMatch(boardSquare -> !boardSquare.isDug() && boardSquare.hasTreasure());
     }
 }
