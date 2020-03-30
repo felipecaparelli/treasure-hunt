@@ -15,7 +15,7 @@ public class NumberUtils {
      * @return true if the value is an valid integer number (digit)
      */
     public static boolean isInteger(String str) {
-        return Character.isDigit(str.charAt(0));
+        return str.matches("-?(0|[1-9]\\d*)");
     }
 
     /**

@@ -1,5 +1,7 @@
 package org.cct.cp2019a.treasurehunt.model;
 
+import org.cct.cp2019a.treasurehunt.exception.AlreadyDugException;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +22,23 @@ public class GameBoard {
      */
     public Map<String, List<BoardSquare>> getGrid() {
         return grid;
+    }
+
+    /**
+     * The action to dig the position on the game board.
+     * @param column a letter from A to J
+     * @param row a number from 1 to 10
+     * @return
+     */
+    public int dig(String column, int row) {
+
+        if(isDug(column, row)) {
+            throw new AlreadyDugException();
+        }
+
+        grid.get(column).get(row-1).setDug(true);
+
+        return hasTreasure(column, row) ? grid.get(column).get(row-1).getTreasure().getValue() : 0;
     }
 
     /**
@@ -52,6 +71,10 @@ public class GameBoard {
         return grid.get(column).get(row-1).isDug();
     }
 
+    /**
+     * Validates if there is still any treasure to be found hidden on the game board.
+     * @return true if there is at least one hidden treasure
+     */
     public boolean isThereAnyTreasureMissing() {
         return this.grid.values()
                 .stream()

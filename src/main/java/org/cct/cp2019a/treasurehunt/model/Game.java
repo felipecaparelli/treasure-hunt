@@ -1,11 +1,9 @@
 package org.cct.cp2019a.treasurehunt.model;
 
-import org.cct.cp2019a.treasurehunt.constant.GameRuleMessages;
 import org.cct.cp2019a.treasurehunt.enumeration.GameStatus;
-import org.cct.cp2019a.treasurehunt.exception.GameRuleException;
-import org.cct.cp2019a.treasurehunt.validator.GameValidator;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -24,27 +22,29 @@ public class Game {
     /** game not initialized */
     public Game () {}
 
+    /**
+     * Inits the game structure (game board and slots for players)
+     * @param gameBoard game board (treasure map)
+     * @param numberOfPlayer the number of players
+     */
     public void init(GameBoard gameBoard, int numberOfPlayer) {
         this.gameBoard = gameBoard;
         this.playerSlots = numberOfPlayer;
         this.slots = new ArrayList<>(numberOfPlayer);
     }
 
-    @Deprecated
-    public boolean addPlayer(Player player) throws GameRuleException {
-        if(GameValidator.MAX_NUM_OF_PLAYER <= this.players.size()) {
-            throw new GameRuleException(GameRuleMessages.NUM_OF_PLAYERS_RULE);
-        }
-        this.playerSlots -= 1;
-        return this.players.add(player);
-    }
-
+    /**
+     * Set the game as started.
+     */
     public void start() {
         this.getSlots().forEach(slot -> this.players.add(new Player(slot.getFullName(), slot.getAge())));
         this.activePlayer = this.players.get(0);
         this.gameStatus = GameStatus.STARTED;
     }
 
+    /**
+     * Change the active player for the next one.
+     */
     public void changeTurn() {
         if (this.players.indexOf(this.activePlayer) == this.players.size() - 1) {
             this.activePlayer = this.players.get(0);
@@ -53,45 +53,92 @@ public class Game {
         }
     }
 
+    /**
+     * Returns if there is any slot to fill with a player
+     * @return true if there are slots pending to be filled
+     */
     public boolean hasAnySlotToFill() {
         return this.playerSlots != this.slots.size();
     }
 
+    /**
+     * Returns the actual game status
+     * @return The game status. See {@link GameStatus}
+     */
     public GameStatus getGameStatus() {
         return gameStatus;
     }
 
+    /**
+     * Updates the game status
+     * @param gameStatus the new game status
+     */
     public void setGameStatus(GameStatus gameStatus) {
         this.gameStatus = gameStatus;
     }
 
+    /**
+     * Returns the game players
+     * @return a list with all players
+     */
     public List<Player> getPlayers() {
         return players;
     }
 
+    /**
+     * Returns the actual active player. See {@link Player}
+     * @return the active player
+     */
     public Player getActivePlayer() {
         return activePlayer;
     }
 
+    /**
+     * Returns a list of slots to be used by the profiling
+     * @return a list of {@link PlayerSlot}
+     */
     public List<PlayerSlot> getSlots() {
         return slots;
     }
 
+    /**
+     * Get the number os slots to be filled.
+     * @return
+     */
     public int getPlayerSlots() {
         return playerSlots;
     }
 
+    /**
+     * Returns the active profile (to be filled with name and age).
+     * @return {@link PlayerSlot}
+     */
     public PlayerSlot getActiveProfile() {
         return activeProfile;
     }
 
+    /**
+     * Returns the game board object.
+     * @return
+     */
     public GameBoard getGameBoard() {
         return gameBoard;
     }
 
+    /**
+     * Move to the next profile data to be filled.
+     */
     public void moveSlot() {
         PlayerSlot slot = this.activeProfile;
         this.slots.add(slot);
         this.activeProfile = new PlayerSlot();
+    }
+
+    /**
+     * Returns the player with more points
+     * @return the winner player
+     */
+    public Player getWinner() {
+        return this.players.stream().max(Comparator.comparingInt(Player::getPiratePoints)).get();
     }
 }

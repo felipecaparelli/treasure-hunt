@@ -62,20 +62,25 @@ public class Player {
 
     @Override
     public String toString() {
-        return "Pirate '" + fullName + ", " + age + "years old - Score: " + piratePoints + " Pirate points";
+        return "Pirate '" + fullName + "', " + age + " years old - Score: " + piratePoints + " Pirate points";
     }
 
+    /**
+     * This method is responsible for changing the state on the Player when the action dig is called.
+     */
     public void dig() {
         Integer digPoints = this.shovel.getDigPoints();
         if (digPoints <= 0) {
             throw new NoMoreDigPointsException();
         }
-        this.piratePoints = this.piratePoints - digPoints;
-        if (this.piratePoints <= 0) {
-
-        }
+        this.shovel.setDigPoints(digPoints-1);
     }
 
+    /**
+     * Add the reward for the player.
+     * @param value the value to be added on the Player's pirate points.
+     */
     public void addReward(int value) {
+        this.piratePoints += value;
     }
 }

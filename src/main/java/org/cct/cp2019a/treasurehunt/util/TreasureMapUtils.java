@@ -1,7 +1,7 @@
 package org.cct.cp2019a.treasurehunt.util;
 
-import org.cct.cp2019a.treasurehunt.model.Treasure;
 import org.cct.cp2019a.treasurehunt.model.BoardSquare;
+import org.cct.cp2019a.treasurehunt.model.Treasure;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -11,7 +11,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -22,10 +21,6 @@ public class TreasureMapUtils {
 
     // Pirate Pete’s secret journal file name
     private static final String SECRET_JOURNAL_FILE_PATH = "PiratePete.txt";
-
-    public static void main(String[] args) {
-        Objects.requireNonNull(readPiratePetesSecretJournal()).forEach(System.out::println);
-    }
 
     /**
      * Read the file to get the positions where the treasures must be hidden.

@@ -2,11 +2,13 @@ package org.cct.cp2019a.treasurehunt.util;
 
 import org.cct.cp2019a.treasurehunt.model.BoardSquare;
 import org.cct.cp2019a.treasurehunt.model.GameBoard;
-import org.cct.cp2019a.treasurehunt.model.Treasure;
 
-import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Class the should be used to create the view elements
@@ -14,35 +16,50 @@ import java.util.stream.Collectors;
 public class ViewUtils {
 
     /**
-     * Build the view grid headers
-     * @param gameBoardGrid
-     * @return
+     * Prints the Game Rules.
      */
-    public static Set<String> buildViewGridHeaders(Map<String, List<BoardSquare>> gameBoardGrid) {
-        return gameBoardGrid.keySet().stream().sorted().collect(Collectors.toCollection(LinkedHashSet::new));
+    public static void printGameRules() {
+        System.out.println("\u2620 ==================================== GAME RULES ===================================== \u2620");
+        try {
+            GameRulesUtils.loadGameRulesFileContent()
+                    .forEach(System.out::println);
+        } catch (URISyntaxException | IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("\u2620 ===================================================================================== \u2620");
     }
 
     /**
-     * Build the view rows
-     * @param gameBoardGrid
-     * @return
+     * Prints the game title.
      */
-    public static List<List<Integer>> buildViewGridRows(Map<String, List<BoardSquare>> gameBoardGrid) {
-        List<List<Integer>> rows = new ArrayList<>(gameBoardGrid.size());
-        for (int cols = 0; cols < gameBoardGrid.size(); cols++) {
-            rows.add(Arrays.asList(1,2,3,4,5,6,7,8,9,10));
-        }
-        return rows;
+    public static void printGameTitle() {
+        System.out.println();
+        System.out.println("==================================================================");
+        System.out.println("-----                   \u2620 TREASURE HUNT \u2620                  -----");
+        System.out.println("==================================================================\n");
+    }
+
+    /**
+     * Print the message in the console.
+     * @param message game message
+     */
+    public static void printMessage(String message) {
+        String preMessage = "    ";
+        System.out.println();
+        System.out.println("\u2620 ¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨ \u2620\n");
+        System.out.println(preMessage + message);
+        System.out.println();
+        System.out.println("\u2620 ¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨ \u2620\n");
     }
 
     /**
      * Prints the game board in the console output.
-     * TODO VALIDATE THE OUTPUT
-     * @param gameBoard
+     * @param gameBoard the game board object
      */
     public static void printGameBoard(GameBoard gameBoard) {
+        System.out.println(" ________________________ TREASURE MAP ________________________");
         Map<String, List<BoardSquare>> grid = gameBoard.getGrid();
-        System.out.print(" __");
+        System.out.print("   ");
         grid.keySet().iterator().forEachRemaining(column -> System.out.print("   " + column + "  "));
         System.out.println("");
         int actualRow = 1;
@@ -60,15 +77,7 @@ public class ViewUtils {
                         System.out.println();
                     }
                 });
+        System.out.println(" ==============================================================");
     }
 
-    public static void main(String[] args) {
-        GameBoard gameBoard = GameUtils.buildGameBoard();
-        gameBoard.getGrid().get("A").get(0).setDug(true);
-        gameBoard.getGrid().get("A").get(6).setDug(true);
-        gameBoard.getGrid().get("B").remove(2);
-        gameBoard.getGrid().get("B").add(2, new BoardSquare("B", 3, new Treasure(20)));
-        gameBoard.getGrid().get("B").get(2).setDug(true);
-        printGameBoard(gameBoard);
-    }
 }

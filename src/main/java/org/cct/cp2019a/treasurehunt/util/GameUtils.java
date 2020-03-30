@@ -10,6 +10,8 @@ import java.util.*;
  */
 public class GameUtils {
 
+    private GameUtils() {}
+
     /**
      * Returns the labels for the game board columns;
      * @return
@@ -58,11 +60,5 @@ public class GameUtils {
 
         }
         return rows;
-    }
-
-    public static void main(String[] args) {
-        buildGameBoard().getGrid().forEach((s, boardSquares) -> {
-            System.out.println("column: " + s + " rows: " + boardSquares.size());
-        });
     }
 }

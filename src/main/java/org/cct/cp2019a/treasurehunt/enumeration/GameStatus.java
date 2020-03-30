@@ -10,7 +10,5 @@ public enum GameStatus {
     ADDING_PLAYER_AGE,
     STARTED,
     PLAYER_ROUND,
-    TREASURE_FOUND,
-    TREASURE_NOT_FOUND,
     GAME_OVER;
 }
