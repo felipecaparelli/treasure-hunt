@@ -1,15 +1,8 @@
 package org.cct.cp2019a.treasurehunt;
 
-import org.cct.cp2019a.treasurehunt.constant.GameMessages;
-import org.cct.cp2019a.treasurehunt.constant.GameRuleMessages;
 import org.cct.cp2019a.treasurehunt.controller.GameController;
-import org.cct.cp2019a.treasurehunt.enumeration.GameStatus;
-import org.cct.cp2019a.treasurehunt.exception.GameRuleException;
 import org.cct.cp2019a.treasurehunt.model.Game;
-import org.cct.cp2019a.treasurehunt.model.Player;
-import org.cct.cp2019a.treasurehunt.util.GameUtils;
 import org.cct.cp2019a.treasurehunt.util.ViewUtils;
-import org.cct.cp2019a.treasurehunt.validator.GameValidator;
 
 import java.util.Scanner;
 

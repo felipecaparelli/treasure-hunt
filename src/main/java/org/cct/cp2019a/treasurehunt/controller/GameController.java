@@ -53,52 +53,6 @@ public class GameController {
     }
 
     /**
-     * Executes the dig operation (validates)
-     * @param game the game data
-     * @param input the user input
-     */
-    private static void goToDig(Game game, String input) {
-        if (gameValidator.isValidDigPosition(game, input)) {
-
-            String column = input.substring(0, 1).toUpperCase();
-            int row = Integer.parseInt(input.substring(1));
-
-            try {
-
-                Player activePlayer = game.getActivePlayer();
-                activePlayer.dig();
-                int reward = game.getGameBoard().dig(column, row);
-                if (reward > 0) {
-                    // was the treasure found?
-                    activePlayer.addReward(reward);
-                    String msg = String.format("Pirate %s got %d Pirate Points!", activePlayer.getFullName(), reward).toUpperCase();
-                    String celebrate = GameMessages.CELEBRATE_MESSAGE + "\n  " + msg;
-                    ViewUtils.printMessage(celebrate);
-                } else {
-                    ViewUtils.printMessage(GameMessages.SUNK_MESSAGE);
-                }
-
-            } catch (DigException de) {
-                ViewUtils.printMessage(de.getMessage());
-                game.changeTurn();
-                game.setGameStatus(GameStatus.PLAYER_ROUND);
-                goToPlayerTurn(game);
-            } catch (Exception e) {
-                ViewUtils.printMessage(e.getMessage());
-            }
-
-            if (gameValidator.isGameOver(game)) {
-                goToGameOver(game);
-            } else {
-                ViewUtils.printGameBoard(game.getGameBoard());
-                game.changeTurn();
-                game.setGameStatus(GameStatus.PLAYER_ROUND);
-                goToPlayerTurn(game);
-            }
-        }
-    }
-
-    /**
      * Moves the game to the step 1: Requires the number of players
      * @param game the game data
      */
@@ -195,6 +149,54 @@ public class GameController {
         String digMessage = GameMessages.DIG_MESSAGE + " (Pirate points: %d)";
         String msg = String.format(digMessage, player.getFullName(), player.getPiratePoints());
         ViewUtils.printMessage(msg);
+    }
+
+    /**
+     * Executes the dig operation (validates)
+     * @param game the game data
+     * @param input the user input
+     */
+    private static void goToDig(Game game, String input) {
+        if (gameValidator.isValidDigPosition(game, input)) {
+
+            String column = input.substring(0, 1).toUpperCase();
+            int row = Integer.parseInt(input.substring(1));
+
+            try {
+
+                Player activePlayer = game.getActivePlayer();
+                activePlayer.dig();
+                int reward = game.getGameBoard().dig(column, row);
+                if (reward > 0) {
+                    // was the treasure found?
+                    activePlayer.addReward(reward);
+                    String msg = String.format("Pirate %s got %d Pirate Points!", activePlayer.getFullName(), reward).toUpperCase();
+                    String celebrate = GameMessages.CELEBRATE_MESSAGE + "\n  " + msg;
+                    ViewUtils.printMessage(celebrate);
+                } else {
+                    ViewUtils.printMessage(GameMessages.SUNK_MESSAGE);
+                }
+
+                Thread.sleep(3000);
+
+            } catch (DigException de) {
+                ViewUtils.printMessage(de.getMessage());
+                game.changeTurn();
+                game.setGameStatus(GameStatus.PLAYER_ROUND);
+                goToPlayerTurn(game);
+            } catch (Exception e) {
+                ViewUtils.printMessage(e.getMessage());
+            }
+
+            if (gameValidator.isGameOver(game)) {
+                goToGameOver(game);
+            } else {
+                ViewUtils.printGameBoard(game.getGameBoard());
+                game.changeTurn();
+                game.setGameStatus(GameStatus.PLAYER_ROUND);
+                goToPlayerTurn(game);
+            }
+        }
     }
 
     /**
