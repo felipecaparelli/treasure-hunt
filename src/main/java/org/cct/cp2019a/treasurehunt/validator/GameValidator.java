@@ -92,39 +92,17 @@ public class GameValidator {
     }
 
     /**
-     * This method validates the input for the dig action.
-     * @param params
-     * @return
-     * @throws InvalidDigPositionException
-     */
-    public boolean isValidDigPosition(String... params) throws InvalidDigPositionException {
-        if (params.length != 2) {
-            throw new InvalidDigPositionException();
-        }
-
-        try {
-
-            String column = params[0];
-            int row = Integer.parseInt(params[1]);
-
-            if (!GameUtils.gameBoardColumnLabels().contains(column) || !NumberUtils.isBetween(row, 1, 10)) {
-                throw new InvalidDigPositionException();
-            }
-        } catch (Exception e) {
-            throw new InvalidDigPositionException();
-        }
-
-        return true;
-    }
-
-    /**
      * This method validates the input for the dig action (OPTION WITH 1 INPUT).
      * @param param
      * @return
      * @throws InvalidDigPositionException
      */
     public boolean isValidDigPosition(Game game, String param) throws InvalidDigPositionException {
-        if (param == null || !NumberUtils.isBetween(param.length(), 2, 3)) {
+        if (param == null || param.isEmpty()) {
+            throw new IllegalArgumentException("Please inform the dig position");
+        }
+        param = param.trim();
+        if (!NumberUtils.isBetween(param.length(), 2, 3)) {
             throw new InvalidDigPositionException();
         }
 
@@ -145,7 +123,7 @@ public class GameValidator {
                 throw new AlreadyDugException();
             }
         } catch (Exception e) {
-            throw e;
+            throw new InvalidDigPositionException();
         }
 
         return true;

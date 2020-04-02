@@ -1,8 +1,6 @@
 package org.cct.cp2019a.treasurehunt;
 
 import org.cct.cp2019a.treasurehunt.controller.GameController;
-import org.cct.cp2019a.treasurehunt.model.Game;
-import org.cct.cp2019a.treasurehunt.util.ViewUtils;
 
 import java.util.Scanner;
 
@@ -18,26 +16,19 @@ public class TreasureHuntGame {
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
-        Game game = new Game();
+        scanner.useDelimiter("\\s+");
 
-        ViewUtils.printGameTitle();
-
-        GameController.goToPlayersSelection(game);
+        GameController gameController = new GameController();
 
         while (scanner.hasNextLine()) {
-            Scanner lineScanner = new Scanner(scanner.nextLine());
-            while (lineScanner.hasNext()) {
-                try {
-                    GameController.execute(game, lineScanner.nextLine());
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                }
+            try {
+                gameController.execute(scanner);
+            } catch (Exception e) {
+                System.err.println(e.getMessage());
             }
-            lineScanner.close();
         }
 
         scanner.close();
     }
-
 
 }

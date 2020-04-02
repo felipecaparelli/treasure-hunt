@@ -28,6 +28,7 @@ public class Game {
      * @param numberOfPlayer the number of players
      */
     public void init(GameBoard gameBoard, int numberOfPlayer) {
+        this.setGameStatus(GameStatus.PLAYER_SELECTION);
         this.gameBoard = gameBoard;
         this.playerSlots = numberOfPlayer;
         this.slots = new ArrayList<>(numberOfPlayer);

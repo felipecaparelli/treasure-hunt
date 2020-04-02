@@ -11,41 +11,53 @@ import org.cct.cp2019a.treasurehunt.util.GameUtils;
 import org.cct.cp2019a.treasurehunt.util.ViewUtils;
 import org.cct.cp2019a.treasurehunt.validator.GameValidator;
 
+import java.util.Scanner;
+
 /**
  * The game controller responsible for managing its status/stages.
  */
 public class GameController {
 
-    private static GameValidator gameValidator = new GameValidator();
+    private GameValidator validator;
+    private Game game;
+
+    /**
+     * Load the game.
+     */
+    public GameController() {
+        this.validator = new GameValidator();
+        this.game = new Game();
+        ViewUtils.printGameTitle();
+        this.goToPlayersSelection();
+    }
 
     /**
      * Executes the logic for the game state control.
-     * @param game the game data
-     * @param input the user input
+     * @param scanner to get the user input
      * @throws GameRuleException
      */
-    public static void execute(Game game, String input) throws GameRuleException {
+    public void execute(Scanner scanner) throws GameRuleException {
         switch (game.getGameStatus()) {
             case NOT_INITIALIZED:
-                goToPlayersSelection(game);
+                goToPlayersSelection();
                 break;
             case PLAYER_SELECTION:
-                goToPlayersProfile(game, input);
+                goToPlayersProfile(scanner);
                 break;
             case ADDING_PLAYER_NAME:
-                goToFillUserAge(game, input);
+                goToFillUserAge(scanner);
                 break;
             case ADDING_PLAYER_AGE:
-                goToCompleteProfile(game, input);
+                goToCompleteProfile(scanner);
                 break;
             case STARTED:
-                goToPlayerTurn(game);
+                goToPlayerTurn();
                 break;
             case PLAYER_ROUND:
-                goToDig(game, input);
+                goToDig(scanner);
                 break;
             case GAME_OVER:
-                goToGameOver(game);
+                goToGameOver();
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + game.getGameStatus());
@@ -54,48 +66,57 @@ public class GameController {
 
     /**
      * Moves the game to the step 1: Requires the number of players
-     * @param game the game data
      */
-    public static void goToPlayersSelection(Game game) {
+    public void goToPlayersSelection() {
         System.out.println("ADD THE NUMBER OF PLAYERS:");
         game.setGameStatus(GameStatus.PLAYER_SELECTION);
     }
 
     /**
      * Moves the game to the step 2: Start the process of adding user's profiles
-     * @param game the game data
-     * @param input the user input
+     * @param scanner to get the user input
      * @throws GameRuleException
      */
-    public static void goToPlayersProfile(Game game, String input) throws GameRuleException {
-        int numberOfPlayers = Integer.parseInt(input);
-        if (gameValidator.isValidPlayerNum(numberOfPlayers)) {
-            game.init(GameUtils.buildGameBoard(), numberOfPlayers);
-            goToFillUserName(game);
+    public void goToPlayersProfile(Scanner scanner) throws GameRuleException {
+
+        String input = scanner.nextLine();
+        try {
+            int numberOfPlayers = Integer.parseInt(input);
+            if (validator.isValidPlayerNum(numberOfPlayers)) {
+                game.init(GameUtils.buildGameBoard(), numberOfPlayers);
+                goToFillUserName();
+            }
+        } catch (NumberFormatException e) {
+            // e.printStackTrace();
+            scanner.next();
         }
+
     }
 
     /**
-     * Moves the game to the step 3: Filling the user's name
-     * @param game the game data
+     * Moves the game to the step 3: Filling the user's name.
      * @throws GameRuleException
      */
-    public static void goToFillUserName(Game game) {
-        System.out.println("SET THE NAME OF PLAYER'S FULL NAME:");
+    public void goToFillUserName() {
         game.setGameStatus(GameStatus.ADDING_PLAYER_NAME);
+        System.out.println("SET THE NAME OF PLAYER'S FULL NAME:");
     }
 
     /**
      * Moves the game to the step 4: Filling the user's age
-     * @param game the game data
-     * @param input the user input
+     * @param scanner to get the user input
      * @throws GameRuleException
      */
-    public static void goToFillUserAge(Game game, String input) throws GameRuleException {
-        if (gameValidator.isValidPlayerName(input)) {
-            game.getActiveProfile().setFullName(input);
-            System.out.println("SET THE PLAYER'S AGE:");
+    public void goToFillUserAge(Scanner scanner) throws GameRuleException {
+
+        String username = scanner.nextLine();
+
+        if (username.isEmpty()) return;
+
+        if (validator.isValidPlayerName(username)) {
+            game.getActiveProfile().setFullName(username.toUpperCase());
             game.setGameStatus(GameStatus.ADDING_PLAYER_AGE);
+            System.out.println(String.format("HOW OLD ARE YOU %s?", game.getActiveProfile().getFullName()));
         } else {
             throw new GameRuleException(GameRuleMessages.PLAYER_NAME_RULE);
         }
@@ -103,14 +124,13 @@ public class GameController {
 
     /**
      * Moves the game to the step 5: Complete the user profile
-     * @param game the game data
-     * @param input the user input
+     * @param scanner to get the user input
      * @throws GameRuleException
      */
-    public static void goToCompleteProfile(Game game, String input) throws GameRuleException {
+    public void goToCompleteProfile(Scanner scanner) throws GameRuleException {
         try {
-            int age = Integer.parseInt(input);
-            if (gameValidator.isValidPlayerAge(age)) {
+            int age = Integer.parseInt(scanner.nextLine());
+            if (validator.isValidPlayerAge(age)) {
                 game.getActiveProfile().setAge(age);
             } else {
                 throw new GameRuleException(GameRuleMessages.PLAYER_AGE_RULE);
@@ -119,9 +139,9 @@ public class GameController {
             game.moveSlot();
 
             if (game.hasAnySlotToFill()) {
-                goToFillUserName(game);
+                goToFillUserName();
             } else {
-                goToGameStart(game);
+                goToGameStart();
             }
         } catch (Exception e) {
             throw new GameRuleException(GameRuleMessages.PLAYER_AGE_RULE);
@@ -130,20 +150,18 @@ public class GameController {
 
     /**
      * Moves the game to the initial position (start).
-     * @param game the game data
      */
-    public static void goToGameStart(Game game) {
+    public void goToGameStart() {
         ViewUtils.printGameRules();
         game.start();
         ViewUtils.printGameBoard(game.getGameBoard());
-        goToPlayerTurn(game);
+        goToPlayerTurn();
     }
 
     /**
-     * Moves the game to the player turn
-     * @param game the game data
+     * Moves the game to the player turn.
      */
-    public static void goToPlayerTurn(Game game) {
+    public void goToPlayerTurn() {
         game.setGameStatus(GameStatus.PLAYER_ROUND);
         Player player = game.getActivePlayer();
         String digMessage = GameMessages.DIG_MESSAGE + " (Pirate points: %d)";
@@ -153,11 +171,12 @@ public class GameController {
 
     /**
      * Executes the dig operation (validates)
-     * @param game the game data
-     * @param input the user input
+     * @param scanner to get the user input
      */
-    private static void goToDig(Game game, String input) {
-        if (gameValidator.isValidDigPosition(game, input)) {
+    private void goToDig(Scanner scanner) {
+        String input = scanner.nextLine();
+
+        if (validator.isValidDigPosition(game, input)) {
 
             String column = input.substring(0, 1).toUpperCase();
             int row = Integer.parseInt(input.substring(1));
@@ -172,9 +191,9 @@ public class GameController {
                     activePlayer.addReward(reward);
                     String msg = String.format("Pirate %s got %d Pirate Points!", activePlayer.getFullName(), reward).toUpperCase();
                     String celebrate = GameMessages.CELEBRATE_MESSAGE + "\n  " + msg;
-                    ViewUtils.printMessage(celebrate);
+                    ViewUtils.printSuccessMessage(celebrate);
                 } else {
-                    ViewUtils.printMessage(GameMessages.SUNK_MESSAGE);
+                    ViewUtils.printBadMessage(GameMessages.SUNK_MESSAGE);
                 }
 
                 Thread.sleep(3000);
@@ -183,32 +202,31 @@ public class GameController {
                 ViewUtils.printMessage(de.getMessage());
                 game.changeTurn();
                 game.setGameStatus(GameStatus.PLAYER_ROUND);
-                goToPlayerTurn(game);
+                goToPlayerTurn();
             } catch (Exception e) {
                 ViewUtils.printMessage(e.getMessage());
             }
 
-            if (gameValidator.isGameOver(game)) {
-                goToGameOver(game);
+            if (validator.isGameOver(game)) {
+                goToGameOver();
             } else {
                 ViewUtils.printGameBoard(game.getGameBoard());
                 game.changeTurn();
                 game.setGameStatus(GameStatus.PLAYER_ROUND);
-                goToPlayerTurn(game);
+                goToPlayerTurn();
             }
         }
     }
 
     /**
      * Moves the game to the end.
-     * @param game the game data
      */
-    public static void goToGameOver(Game game) {
+    public void goToGameOver() {
         game.setGameStatus(GameStatus.GAME_OVER);
         Player winner = game.getWinner();
-        String winnerMessage = String.format(GameMessages.WINNER_MESSAGE, winner.getFullName());
-        ViewUtils.printMessage(winnerMessage);
-        ViewUtils.printMessage(GameMessages.GAME_OVER_MESSAGE);
+        ViewUtils.printMessage(String.format(GameMessages.WINNER_MESSAGE, winner.getFullName()));
+
+        ViewUtils.printGameOver();
         System.exit(0);
     }
 }

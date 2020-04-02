@@ -21,8 +21,7 @@ public class ViewUtils {
     public static void printGameRules() {
         System.out.println("\u2620 ==================================== GAME RULES ===================================== \u2620");
         try {
-            GameRulesUtils.loadGameRulesFileContent()
-                    .forEach(System.out::println);
+            GameRulesUtils.loadGameRulesFileContent().forEach(System.out::println);
         } catch (URISyntaxException | IOException e) {
             e.printStackTrace();
         }
@@ -33,10 +32,16 @@ public class ViewUtils {
      * Prints the game title.
      */
     public static void printGameTitle() {
-        System.out.println();
-        System.out.println("==================================================================");
-        System.out.println("-----                   \u2620 TREASURE HUNT \u2620                  -----");
-        System.out.println("==================================================================\n");
+        String welcomeText = "" +
+                "\u2620 ============================================================================================== \u2620\n" +
+                "████████╗██████╗░███████╗░█████╗░░██████╗██╗░░░██╗██████╗░███████╗  ██╗░░██╗██╗░░░██╗███╗░░██╗████████╗\n" +
+                "╚══██╔══╝██╔══██╗██╔════╝██╔══██╗██╔════╝██║░░░██║██╔══██╗██╔════╝  ██║░░██║██║░░░██║████╗░██║╚══██╔══╝\n" +
+                "░░░██║░░░██████╔╝█████╗░░███████║╚█████╗░██║░░░██║██████╔╝█████╗░░  ███████║██║░░░██║██╔██╗██║░░░██║░░░\n" +
+                "░░░██║░░░██╔══██╗██╔══╝░░██╔══██║░╚═══██╗██║░░░██║██╔══██╗██╔══╝░░  ██╔══██║██║░░░██║██║╚████║░░░██║░░░\n" +
+                "░░░██║░░░██║░░██║███████╗██║░░██║██████╔╝╚██████╔╝██║░░██║███████╗  ██║░░██║╚██████╔╝██║░╚███║░░░██║░░░\n" +
+                "░░░╚═╝░░░╚═╝░░╚═╝╚══════╝╚═╝░░╚═╝╚═════╝░░╚═════╝░╚═╝░░╚═╝╚══════╝  ╚═╝░░╚═╝░╚═════╝░╚═╝░░╚══╝░░░╚═╝░░░\n" +
+                "\u2620 ============================================================================================== \u2620";
+        System.out.println(welcomeText);
     }
 
     /**
@@ -44,11 +49,9 @@ public class ViewUtils {
      * @param message game message
      */
     public static void printMessage(String message) {
-        String preMessage = "    ";
         System.out.println();
         System.out.println("\u2620 ¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨ \u2620\n");
-        System.out.println(preMessage + message);
-        System.out.println();
+        System.out.println("    " + message + "    \n");
         System.out.println("\u2620 ¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨ \u2620\n");
     }
 
@@ -78,6 +81,41 @@ public class ViewUtils {
                     }
                 });
         System.out.println(" ==============================================================");
+    }
+
+    /**
+     * Print the game over message in the console.
+     */
+    public static void printGameOver() {
+        System.out.println();
+        System.out.println(
+                "\u2620 ¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨ \u2620\n" +
+                "                       ▒█▀▀█ ░█▀▀█ ▒█▀▄▀█ ▒█▀▀▀ 　 ▒█▀▀▀█ ▒█░░▒█ ▒█▀▀▀ ▒█▀▀█ \n" +
+                "                       ▒█░▄▄ ▒█▄▄█ ▒█▒█▒█ ▒█▀▀▀ 　 ▒█░░▒█ ░▒█▒█░ ▒█▀▀▀ ▒█▄▄▀ \n" +
+                "                       ▒█▄▄█ ▒█░▒█ ▒█░░▒█ ▒█▄▄▄ 　 ▒█▄▄▄█ ░░▀▄▀░ ▒█▄▄▄ ▒█░▒█ \n" +
+                "\u2620 ¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨ \u2620\n");
+    }
+
+    /**
+     * Print the success message in the console.
+     * @param message game message
+     */
+    public static void printSuccessMessage(String message) {
+        System.out.println();
+        System.out.println("\u2620 ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ \u2620\n");
+        System.out.println("    " + message + "    \n");
+        System.out.println("\u2620 ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ \u2620\n");
+    }
+
+    /**
+     * Print the bad message in the console.
+     * @param message game message
+     */
+    public static void printBadMessage(String message) {
+        System.out.println();
+        System.out.println("\u2620 ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ \u2620\n");
+        System.out.println("    " + message + "    \n");
+        System.out.println("\u2620 ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ \u2620\n");
     }
 
 }
