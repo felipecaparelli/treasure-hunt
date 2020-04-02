@@ -1,4 +1,4 @@
-1) Each player may only select a square that exists on the “Map”
+1) Each player may only select a square that exists on the “Map” (A1, B3, C4, G7, H9, etc.)
 2) A square can only be selected once (i.e. you cannot ‘dig’ in the same place more than once)
 3) If the player finds some treasure, then the value will be added to his/her “Pirate Points”
 4) If the player does not find any treasure, then they do not score any “Pirate Points”
