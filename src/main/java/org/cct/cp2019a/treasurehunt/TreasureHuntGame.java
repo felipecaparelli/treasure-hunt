@@ -14,6 +14,8 @@ public class TreasureHuntGame {
      * @param args initial parameters
      */
     public static void main(String[] args) {
+        
+        System.setProperty("console.encoding", "UTF-8");
 
         Scanner scanner = new Scanner(System.in);
         scanner.useDelimiter("\\s+");
